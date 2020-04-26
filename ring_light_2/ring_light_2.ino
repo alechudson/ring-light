@@ -14,7 +14,7 @@
 #define LED_COUNT  204
 
 // NeoPixel brightness, 0 (min) to 255 (max)
-#define BRIGHTNESS 255
+#define BRIGHTNESS 255 //To change white brightness use value specific to white, do not adjust here
 
 // Analog Brightness Knob
 int brightnessKnob = A0; //define the pin for the brightness knob
@@ -26,17 +26,17 @@ int tempKnob = A1; //define the pin for the color temperature knob
 int inTemp = 0; // variable to store data from tempKnob
 int outTemp = 0; //newly mapped value for color temperature
 
-//Analog Color Brightness 
+//Analog Color Red 
 int redKnob = A2;
 int inRed = 0; // variable to store the value from hueKnob
 int red = 0; // mapped value for color
 
-//Analog Color Saturation
+//Analog Color Green
 int greenKnob = A3;
 int inGreen = 0; // variable to store the value from hueKnob
 int green = 0; // mapped value for color
 
-//Analog Color Hue
+//Analog Color Blue
 int blueKnob = A4;
 int inBlue = 0; // variable to store the value from hueKnob
 int blue = 0; // mapped value for color
@@ -54,7 +54,6 @@ Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRBW + NEO_KHZ800);
 //   NEO_RGBW    Pixels are wired for RGBW bitstream (NeoPixel RGBW products)
 
 void setup() {
-  Serial.begin(115200);
   // These lines are specifically to support the Adafruit Trinket 5V 16 MHz.
   // Any other board, you can remove this part (but no harm leaving it):
 #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
@@ -68,16 +67,16 @@ void setup() {
 }
 
 void loop() {
-  int invertedOutTemp = (outLum - outTemp); // +.5 is to get rid of some slop
+  int invertedOutTemp = (outLum - outTemp); 
   inLum = analogRead(brightnessKnob);
   outLum = map(inLum, 1023, 0, 0, 255);
   strip.fill(strip.Color(0, 0, 0, outLum));
 
   inTemp = analogRead(tempKnob);
-  outTemp = map(inTemp, 1023, 0, 0 , outLum); //same as before but now limited to lumOut for birghtness control
+  outTemp = map(inTemp, 1023, 0, 0 , outLum); //same as before but now limited to lumOut for brightness control
 
-  strip.fill(strip.Color(red, green, blue, outTemp), 0, 100); // range of first color temp
-  strip.fill(strip.Color(red, green, blue, invertedOutTemp), 100, 204); // range of second color temp
+  strip.fill(strip.Color(red, green, blue, outTemp), 0, 100); // RGB + range of first color temp
+  strip.fill(strip.Color(red, green, blue, invertedOutTemp), 100, 204); // RGB + range of second color temp
 
   //RGB STUFF
   inRed = analogRead(redKnob);
@@ -89,6 +88,5 @@ void loop() {
   inBlue = analogRead(blueKnob);
   blue = map(inBlue, 1023, 0, 0, 255);
 
-  strip.show();
-  Serial.println(red);
+  strip.show(); //this is what makes everything above display.
 }
