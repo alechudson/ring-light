@@ -67,7 +67,7 @@ void setup() {
 }
 
 void loop() {
-  int invertedOutTemp = (outLum - outTemp); 
+  int invertedOutTemp = (outLum - outTemp); //variable to store inverted temp
   inLum = analogRead(brightnessKnob);
   outLum = map(inLum, 1023, 0, 0, 255);
   strip.fill(strip.Color(0, 0, 0, outLum));
@@ -75,6 +75,7 @@ void loop() {
   inTemp = analogRead(tempKnob);
   outTemp = map(inTemp, 1023, 0, 0 , outLum); //same as before but now limited to lumOut for brightness control
 
+  //One color temperature fades as the other gets brighter.
   strip.fill(strip.Color(red, green, blue, outTemp), 0, 100); // RGB + range of first color temp
   strip.fill(strip.Color(red, green, blue, invertedOutTemp), 100, 204); // RGB + range of second color temp
 
